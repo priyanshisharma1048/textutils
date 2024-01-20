@@ -7,9 +7,11 @@ import React from 'react'
         return lower.charAt(0).toUpperCase()+lower.slice(1);
     }
   return (
-    // props.alert && yeh ek property hai agar usko null milta hai toh
-    props.alert && <div className={`alert alert-${props.alert.type} alert-dismissible fade show`} role="alert">
+    <div style={{height: '50px'}}>
+    {/* // props.alert && yeh ek property hai agar usko null milta hai toh */}
+    {props.alert && <div className={`alert alert-${props.alert.type} alert-dismissible fade show`} role="alert">
         <strong>{capitalize(props.alert.type)}</strong>:{props.alert.msg}
+</div>}
 </div>
   )
 }

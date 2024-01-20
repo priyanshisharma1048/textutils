@@ -1,45 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
-import Navbar from './components/Navbar'
-// import Textform from './components/Textform'
-import React, {useState}from  'react';
-import Alert from './components/Alert';
-import About from './components/About';
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Textform from "./components/Textform";
+import React, { useState } from "react";
+import Alert from "./components/Alert";
 
+import About from "./components/About";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // line no. 3 mai jsx specifying attributes hai aur esse ko 35 line mai show kiya hai
 
 function App() {
   // whether dark mode is enabled or not
-  const [mode,setMode]= useState('light');
-  const[alert,setAlert]=useState(null);
+  const [mode, setMode] = useState("light");
+  const [alert, setAlert] = useState(null);
 
-  const showAlert=(message,type)=>{
-setAlert({
-  msg:message,
-  type:type
-})
-// it is a logic esse 3000 etne time mai alert hat jayega show nhi hoga 
-setTimeout(()=>{
-  setAlert(null);
-},1500);
-  }
-  const toggleMode = () => {
-    if(mode === 'light'){
-      setMode('dark');
-      document.body.style.backgroundColor='#042743'
-      showAlert("Dark mode has been enabled","success");
-      // line no. 32 aur 38 mai page ka title change hoga agar darkmode hai toh yeh likha aayega 
-      document.title='textutils-darkmode'; 
-    }
-    else{
-      setMode('light');
-      document.body.style.backgroundColor='white'
-      showAlert("Light mode has been enabled","success");
-      document.title='textutils-lightmode';
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+    // it is a logic esse 3000 etne time mai alert hat jayega show nhi hoga
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+  const removeBodyClasses= () => {
+    document.body.classList.remove('bg-light')
+    document.body.classList.remove('bg-dark')
+    document.body.classList.remove('bg-warning')
+    document.body.classList.remove('bg-danger')
+    document.body.classList.remove('bg-success')
 
+  };
+  const toggleMode = (cls) => {
+    
+    removeBodyClasses();
 
-
+    document.body.classList.add('bg-'+cls)
+    if (mode === "light") {
+      setMode("dark");
+      document.body.style.backgroundColor = "#042743";
+      showAlert("Dark mode has been enabled", "success");
+      // line no. 32 aur 38 mai page ka title change hoga agar darkmode hai toh yeh likha aayega
+      // document.title = "textutils-darkmode";
+    } else {
+      setMode("light");
+      document.body.style.backgroundColor = "white";
+      showAlert("Light mode has been enabled", "success");
+      // document.title = "textutils-lightmode";
     }
   };
   return (
@@ -64,16 +73,19 @@ setTimeout(()=>{
     //     </a>
     //   </header>
     // </div>
-<>
-<Navbar title="textutils2" mode={mode} toggleMode={toggleMode}/> 
- {/* yeh jo alert pass hua hai bo line no. 13 se hai */}
-<Alert alert={alert}/>
-<div className="container my-3">
-{/* <Textform showAlert={showAlert}heading="Enter the text to analyiz below"/> */}
-{/* edher humne ek new component banya hai about.js ka usse hum show karenge esiliye textform ko humne comment kar diya  */}
-<About/>
-</div>
-</>
+    <>
+       <Router>
+        <Navbar title="textutils2" mode={mode} toggleMode={toggleMode} />
+        <Alert alert={alert} />
+        <div className="container my-3">
+          <Routes>
+            {/* eder exact use esilye kkiya gya hai kuki exact path par file par leke jata hai */}
+            <Route exact path="/about" element={<About mode={mode} />} />
+            <Route exact path="/" element={<Textform showAlert={showAlert} heading=" Try Textutils- word counter, character coutner remove extra space" mode={mode} />} />
+          </Routes>
+        </div>
+      </Router>
+    </>
   );
 }
 
